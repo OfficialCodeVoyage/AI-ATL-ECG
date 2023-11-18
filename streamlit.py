@@ -3,6 +3,7 @@ from io import StringIO
 import numpy as np
 import automatic_ecg_diagnosis_master.predict as predict
 import google.generativeai as palm
+import google.ai.generativelanguage as gen_lang
 import matplotlib.pyplot as plt
 
 #configuration
@@ -10,6 +11,7 @@ np.set_printoptions(suppress=True)
 palm.configure(api_key='AIzaSyBvMkWvomihQQf6ehjPhuup4nLoKOVcoUk')
 models = [m for m in palm.list_models() if 'generateText' in m.supported_generation_methods]
 model = models[0].name
+
 
 
 
@@ -27,7 +29,6 @@ def call_api(age, sex, data):
     AF: atrial fibrillation
     ST: sinus tachycardia 
 
-
     If a patient had the percentage likelihood of each condition below,
     what would you recommend about the patient's further tests and/or treatment? 
     This patient is """ + str(age) +""" years old and """ + sex + """. 
@@ -39,16 +40,21 @@ def call_api(age, sex, data):
     SB: """+ str(data[3]) +"""
     AF: """ + str(data[4]) + """
     ST: """+ str(data[5])
-    print(model)
-    print(prompt)
+    
+    
 
     completion = palm.generate_text(
-    model=model,
-    prompt=prompt,
-    temperature=0,
-    # The maximum length of the response
-    max_output_tokens=800,)
-    print(completion.result)
+        model=model,
+        prompt=prompt,
+        safety_settings=[
+        {
+            "category": gen_lang.HarmCategory.HARM_CATEGORY_MEDICAL,
+            "threshold": gen_lang.SafetySetting.HarmBlockThreshold.BLOCK_NONE,
+        },],
+        temperature=0,
+        # The maximum length of the response
+        max_output_tokens=800,)
+    
     return completion.result
 
 ## streamlight code
