@@ -5,6 +5,7 @@ import automatic_ecg_diagnosis_master.predict as predict
 import google.generativeai as palm
 import google.ai.generativelanguage as gen_lang
 import matplotlib.pyplot as plt
+import time
 
 #configuration
 np.set_printoptions(suppress=True)
@@ -52,32 +53,35 @@ def call_api(age, sex, data):
     
     return completion.result
 
+
 ## streamlight code
 
 st.title('Automatic ECG diagnosis')
 st.subheader('A tool to view and analyze ECG data, backed by a deep neural network for classification', divider='blue')
 uploaded_file = st.file_uploader("Upload your DICOM file (.dcm)")
 
-age = st.number_input("Patient age", min_value = 0, max_value = 120, value=60)
-sex  = st.selectbox("Patient sex", ["Male", "Female"])
+col1, col2,  = st.columns(2)
+with col1:
+    age = st.number_input("Patient age", min_value = 0, max_value = 120, value=60)
+with col2:
+    sex  = st.selectbox("Patient sex", ["Male", "Female"])
 
 labels = [ "1dAVb", "RBBB", "LBBB", "SB", "AF", "ST"]
 
 #makes the prediction
 if st.button('Submit'):
-    data = predict.make_prediction(path_to_hdf5 = "./automatic_ecg_diagnosis_master/data/ecg_tracings.hdf5", 
+    with st.spinner('Analyzing data...'):
+        data = predict.make_prediction(path_to_hdf5 = "./automatic_ecg_diagnosis_master/data/ecg_tracings.hdf5", 
                                    path_to_model = "./automatic_ecg_diagnosis_master/model/model.hdf5")
+        result = call_api(age, sex, data)
+    st.success('Done!')
+    st.markdown(result)
     chart_data  = dict(zip(labels, data))
-    st.text(data)
     st.bar_chart(data=chart_data, color="#e9a56b")
     percent_data = np.round(data * 100.0, 2).astype(np.float16)
-    st.text(percent_data)
-    result = call_api(age, sex, data)
-    st.text(result)
+   
 
-#ECG_image = st.image()
 
-# sample_array = {"1dAVb": 13.239485, "RBBB": 0.546861, "LBBB": 0.006619, "SB": 0.052661, "AF": 0.131343, "ST": 0.000431}
 
 
 
