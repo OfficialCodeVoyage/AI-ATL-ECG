@@ -7,12 +7,14 @@ import matplotlib.pyplot as plt
 
 #configuration
 np.set_printoptions(suppress=True)
-# palm.configure(api_key='AIzaSyBvMkWvomihQQf6ehjPhuup4nLoKOVcoUk')
-# models = [m for m in palm.list_models() if 'generateText' in m.supported_generation_methods]
-# model = models[0].name
+palm.configure(api_key='AIzaSyBvMkWvomihQQf6ehjPhuup4nLoKOVcoUk')
+models = [m for m in palm.list_models() if 'generateText' in m.supported_generation_methods]
+model = models[0].name
+
 
 
 def call_api(age, sex, data):
+    global model
     sex = "male" if sex == "M" else "female"
     
     prompt = """Pretend you are a cardiologist.You have an ECG interpreting machine learning model that classified a patient's ECG data and provided percentage likelihoods for each condition 1dAVb, RBBB, LBBB, SB, AF,  ST.
@@ -37,16 +39,17 @@ def call_api(age, sex, data):
     SB: """+ str(data[3]) +"""
     AF: """ + str(data[4]) + """
     ST: """+ str(data[5])
+    print(model)
+    print(prompt)
 
-    return prompt
-
-    # completion = palm.generate_text(
-    # model=model,
-    # prompt=prompt,
-    # temperature=0.3,
-    # # The maximum length of the response
-    # max_output_tokens=800,)
-    # return completion.result
+    completion = palm.generate_text(
+    model=model,
+    prompt=prompt,
+    temperature=0,
+    # The maximum length of the response
+    max_output_tokens=800,)
+    print(completion.result)
+    return completion.result
 
 ## streamlight code
 age = 28
