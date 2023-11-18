@@ -159,3 +159,4 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 automatic-ecg-diagnosis-master/data/ecg_tracings.hdf5
+automatic_ecg_diagnosis_master/data/ecg_tracings.hdf5
