@@ -50,20 +50,21 @@ def convert_dicom_to_hdf5(dicom_path, hdf5_path):
 
 
 # Open the HDF5 file
-with h5py.File('new_ecg_tracings1.hdf5', 'r') as file:
-    # Access the 'tracings' dataset
-    tracings = file['tracings']
+def check_hdf5_file():
+    with h5py.File('new_ecg_tracings1.hdf5', 'r') as file:
+        # Access the 'tracings' dataset
+        tracings = file['tracings']
 
-    # Get basic information about the dataset
-    shape = tracings.shape  # The shape of the dataset (dimensions and size)
-    dtype = tracings.dtype  # Data type of the elements
+        # Get basic information about the dataset
+        shape = tracings.shape  # The shape of the dataset (dimensions and size)
+        dtype = tracings.dtype  # Data type of the elements
 
-    # Optionally, read a small part of the dataset
-    # Reading only the first few entries to avoid loading large data into memory
-    sample_data = tracings[:5]  # Adjust the number as needed
+        # Optionally, read a small part of the dataset
+        # Reading only the first few entries to avoid loading large data into memory
+        sample_data = tracings[:5]  # Adjust the number as needed
 
-    # Print the information
-    print("Shape of Dataset:", shape)
-    print("Data Type of Dataset:", dtype)
-    print("Sample Data (first few entries):", sample_data)
+        # Print the information
+        print("Shape of Dataset:", shape)
+        print("Data Type of Dataset:", dtype)
+        print("Sample Data (first few entries):", sample_data)
 
