@@ -6,10 +6,10 @@ import google.generativeai as palm
 import matplotlib.pyplot as plt
 
 #configuration
-np.set_printoptions(suppress=True)
-palm.configure(api_key='AIzaSyBvMkWvomihQQf6ehjPhuup4nLoKOVcoUk')
-models = [m for m in palm.list_models() if 'generateText' in m.supported_generation_methods]
-model = models[0].name
+# np.set_printoptions(suppress=True)
+# palm.configure(api_key='AIzaSyBvMkWvomihQQf6ehjPhuup4nLoKOVcoUk')
+# models = [m for m in palm.list_models() if 'generateText' in m.supported_generation_methods]
+# model = models[0].name
 
 
 
