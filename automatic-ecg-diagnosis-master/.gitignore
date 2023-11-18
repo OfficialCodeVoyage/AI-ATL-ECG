@@ -129,4 +129,4 @@ dmypy.json
 .pyre/
 
 # Avoid large files
-*.hdf5
+# *.hdf5
