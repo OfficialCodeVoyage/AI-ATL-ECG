@@ -52,7 +52,7 @@ def call_api(age, sex, data):
             "category": gen_lang.HarmCategory.HARM_CATEGORY_MEDICAL,
             "threshold": gen_lang.SafetySetting.HarmBlockThreshold.BLOCK_NONE,
         },],
-        temperature=0,
+        temperature=0.3,
         # The maximum length of the response
         max_output_tokens=800,)
     
@@ -127,7 +127,7 @@ if submit_button:
     )
     st.altair_chart(chart, theme="streamlit", use_container_width=True)
 
-
+    st.markdown("**ECG Output:**")
     waveform = generate_waveform(uploaded_file)
     plot = plot_ecg(waveform)
     st.pyplot(plot)
