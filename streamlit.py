@@ -8,10 +8,10 @@ import matplotlib.pyplot as plt
 import time
 
 #configuration
-# np.set_printoptions(suppress=True)
-# palm.configure(api_key='AIzaSyBvMkWvomihQQf6ehjPhuup4nLoKOVcoUk')
-# models = [m for m in palm.list_models() if 'generateText' in m.supported_generation_methods]
-# model = models[0].name
+np.set_printoptions(suppress=True)
+palm.configure(api_key='AIzaSyBvMkWvomihQQf6ehjPhuup4nLoKOVcoUk')
+models = [m for m in palm.list_models() if 'generateText' in m.supported_generation_methods]
+model = models[0].name
 
 def call_api(age, sex, data):
     global model
