@@ -36,6 +36,7 @@ def convert_dicom_to_hdf5(dicom_path, hdf5_path):
 
                 # Reshape the data and convert to float64
                 waveform_data = waveform_data.reshape(num_recordings, num_samples_per_recording, num_leads).astype(np.float64)
+                waveform_data = waveform_data / 1000.0
 
                 # Save the waveform data to HDF5
                 with h5py.File(hdf5_path+str(i)+".hdf5", 'w') as hdf:
