@@ -1,4 +1,6 @@
 import streamlit as st
+import altair as alt
+import pandas as pd
 from io import StringIO
 import numpy as np
 import automatic_ecg_diagnosis_master.predict as predict
@@ -52,7 +54,7 @@ def call_api(age, sex, data):
             "category": gen_lang.HarmCategory.HARM_CATEGORY_MEDICAL,
             "threshold": gen_lang.SafetySetting.HarmBlockThreshold.BLOCK_NONE,
         },],
-        temperature=0,
+        temperature=0.3,
         # The maximum length of the response
         max_output_tokens=800,)
     
@@ -89,6 +91,13 @@ if uploaded_file is not None:
 
 submit_button = st.button('Submit', key='submit', disabled=st.session_state.get("disabled", True))
 
+diagnosis = ["1st degree AV block", 
+            "Right bundle branch block",
+            "Left bundle branch block" ,
+            "Sinus bradycardia",
+            "Atrial fibrillation",
+            "Sinus tachycardia" ]
+
 if submit_button:
     copy_of_upload = copy.deepcopy(uploaded_file)
     with st.spinner('Analyzing data...'):
@@ -103,14 +112,32 @@ if submit_button:
     st.write("#")
     print(result)
     
-    st.markdown("**Predicted Liklihood:**")
-    chart_data  = dict(zip(labels, data))
-    st.bar_chart(data=chart_data, color="#e9a56b")
+    st.markdown("**Predicted Diagnosis Likelihood:**")
     percent_data = np.round(data * 100.0, 2).astype(np.float16)
 
+    # Bottom panel is a bar chart of weather type
+    source = pd.DataFrame({
+        'Diagnosis': labels,
+        'Likelihood': percent_data,
+        'Percentage': data,
+        'Diagnosis Name':diagnosis
+    })
+
+    chart = alt.Chart(source).mark_bar().encode(
+        x='Diagnosis',
+        y=alt.Y('Likelihood', scale=alt.Scale(domain=[0, 100])),
+        tooltip=[ alt.Tooltip('Diagnosis Name'), alt.Tooltip('Percentage', format='.1%')]
+    ).configure_mark(
+        color="#e9a56b"
+    )
+    st.altair_chart(chart, theme="streamlit", use_container_width=True)
+
+    st.markdown("**ECG Output:**")
+    
     waveform = generate_waveform(copy_of_upload)
     plot = plot_ecg(waveform)
     st.pyplot(plot)
+
    
 
 
