@@ -71,12 +71,11 @@ def take_recommendation(result):
         else:
             return result
     
-def disable(b):
-    st.session_state["disabled"] = b
+
 ## streamlight code
 
 st.title('Automatic ECG diagnosis')
-st.subheader('A tool to view and analyze ECG data, backed by a deep neural network for classification', divider='blue')
+st.subheader('A tool to analyze and view ECG data, backed by a deep neural network for classification', divider='blue')
 
 uploaded_file = st.file_uploader("Upload your DICOM file (.dcm)", type=['dcm'])
 
