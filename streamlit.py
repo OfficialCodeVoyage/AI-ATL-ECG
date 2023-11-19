@@ -16,7 +16,7 @@ st.set_option('deprecation.showPyplotGlobalUse', False)
 
 #configuration
 np.set_printoptions(suppress=True)
-palm.configure(api_key='AIzaSyBvMkWvomihQQf6ehjPhuup4nLoKOVcoUk')
+palm.configure(api_key='')
 models = [m for m in palm.list_models() if 'generateText' in m.supported_generation_methods]
 model = models[0].name
 
