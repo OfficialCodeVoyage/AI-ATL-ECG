@@ -52,7 +52,7 @@ def call_api(age, sex, data):
             "category": gen_lang.HarmCategory.HARM_CATEGORY_MEDICAL,
             "threshold": gen_lang.SafetySetting.HarmBlockThreshold.BLOCK_NONE,
         },],
-        temperature=0.3,
+        temperature=0,
         # The maximum length of the response
         max_output_tokens=800,)
     
@@ -63,7 +63,11 @@ def take_recommendation(result):
     if len(split) > 1:
         return "**Recommendations:**" + split[1]
     else: 
-        return result
+        split = result.split("**Recommendation:**",1)
+        if len(split) > 1:
+            return "**Recommendations:**" + split[1]
+        else:
+            return result
     
 def disable(b):
     st.session_state["disabled"] = b
