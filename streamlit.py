@@ -8,6 +8,9 @@ import google.generativeai as palm
 import google.ai.generativelanguage as gen_lang
 import matplotlib.pyplot as plt
 import time
+from image_from_dcm import generate_waveform, plot_ecg
+
+st.set_option('deprecation.showPyplotGlobalUse', False)
 
 #configuration
 np.set_printoptions(suppress=True)
@@ -68,9 +71,8 @@ def disable(b):
 
 st.title('Automatic ECG diagnosis')
 st.subheader('A tool to view and analyze ECG data, backed by a deep neural network for classification', divider='blue')
-uploaded_file = st.file_uploader("Upload your DICOM file (.dcm)")
 
-    
+uploaded_file = st.file_uploader("Upload your DICOM file (.dcm)", type=['dcm'])
 
 col1, col2,  = st.columns(2)
 with col1:
@@ -124,6 +126,12 @@ if submit_button:
         color="#e9a56b"
     )
     st.altair_chart(chart, theme="streamlit", use_container_width=True)
+
+
+    waveform = generate_waveform(uploaded_file)
+    plot = plot_ecg(waveform)
+    st.pyplot(plot)
+
    
 
 
