@@ -53,6 +53,13 @@ def call_api(age, sex, data):
     
     return completion.result
 
+def take_recommendation(result):
+    split = result.split("**Recommendations:**",1)
+    if len(split) > 1:
+        return "**Recommendations:**" + split[1]
+    else: 
+        return result
+    
 
 ## streamlight code
 
@@ -75,7 +82,13 @@ if st.button('Submit'):
                                    path_to_model = "./automatic_ecg_diagnosis_master/model/model.hdf5")
         result = call_api(age, sex, data)
     st.success('Done!')
-    st.markdown(result)
+    recommendation = take_recommendation(result)
+    st.write("#")
+    st.markdown(recommendation)
+    st.write("#")
+    print(result)
+    
+    st.markdown("**Predicted Likliehood:**")
     chart_data  = dict(zip(labels, data))
     st.bar_chart(data=chart_data, color="#e9a56b")
     percent_data = np.round(data * 100.0, 2).astype(np.float16)
