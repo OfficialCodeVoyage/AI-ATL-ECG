@@ -74,7 +74,7 @@ def take_recommendation(result):
 
 ## streamlight code
 
-st.title('Automatic ECG diagnosis')
+st.title('An AI-powered ECG diagnostic aid')
 st.subheader('A tool to analyze and view ECG data, backed by a deep neural network for classification', divider='blue')
 
 uploaded_file = st.file_uploader("Upload your DICOM file (.dcm)", type=['dcm'])
