@@ -27,6 +27,8 @@ def generate_waveform(file_path):
                 num_recordings = len(waveform_data) // total_samples
                 waveform_data = waveform_data[:num_recordings * total_samples]
                 waveform_data = waveform_data.reshape(num_recordings, num_samples_per_recording, num_leads).astype(np.float64)
+                waveform_data = waveform_data / 1000.0
+
                 return waveform_data
     else:
         print("No ECG waveform data found in the DICOM file.")
@@ -52,5 +54,5 @@ def plot_ecg(waveform_data, num_leads=12, num_samples_per_recording=4096):
 
 
 # Replace with the path to your DICOM file
-#waveform = generate_waveform("anonymous_ecg.dcm")
-#plot_ecg(waveform)
+waveform = generate_waveform("anonymous_ecg.dcm")
+plot_ecg(waveform)
