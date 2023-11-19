@@ -4,7 +4,7 @@ import numpy as np
 
 def generate_waveform(file_path):
     # Read the DICOM file
-    ds = pydicom.dcmread(file_path)
+    ds = pydicom.dcmread(file_path, force=True)
 
 
     if (0x5400, 0x0100) in ds:
@@ -50,9 +50,10 @@ def plot_ecg(waveform_data, num_leads=12, num_samples_per_recording=4096):
         axes[i].set_ylabel('Amplitude')
 
     plt.tight_layout()
-    plt.show()
+    return fig
+    #plt.show()
 
 
 # Replace with the path to your DICOM file
-waveform = generate_waveform("anonymous_ecg.dcm")
-plot_ecg(waveform)
+#waveform = generate_waveform("anonymous_ecg.dcm")
+#plot_ecg(waveform)
