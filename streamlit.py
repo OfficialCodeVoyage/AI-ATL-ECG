@@ -9,6 +9,8 @@ import google.ai.generativelanguage as gen_lang
 import matplotlib.pyplot as plt
 import time
 from image_from_dcm import generate_waveform, plot_ecg
+from dcm_to_hd5 import convert_dicom_to_hdf5
+import copy
 
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
@@ -86,6 +88,7 @@ labels = [ "1dAVb", "RBBB", "LBBB", "SB", "AF", "ST"]
 if uploaded_file is not None:
     st.session_state.disabled = False
 
+
 submit_button = st.button('Submit', key='submit', disabled=st.session_state.get("disabled", True))
 
 diagnosis = ["1st degree AV block", 
@@ -96,8 +99,10 @@ diagnosis = ["1st degree AV block",
             "Sinus tachycardia" ]
 
 if submit_button:
+    copy_of_upload = copy.deepcopy(uploaded_file)
     with st.spinner('Analyzing data...'):
-        data = predict.make_prediction(path_to_hdf5 = "./automatic_ecg_diagnosis_master/data/ecg_tracings.hdf5", 
+        convert_dicom_to_hdf5(uploaded_file, "./automatic_ecg_diagnosis_master/data/ecg_tracings")
+        data = predict.make_prediction(path_to_hdf5 = "./automatic_ecg_diagnosis_master/data/ecg_tracings1.hdf5", 
                                    path_to_model = "./automatic_ecg_diagnosis_master/model/model.hdf5")
         result = call_api(age, sex, data)
     st.success('Done!')
@@ -128,7 +133,8 @@ if submit_button:
     st.altair_chart(chart, theme="streamlit", use_container_width=True)
 
     st.markdown("**ECG Output:**")
-    waveform = generate_waveform(uploaded_file)
+    
+    waveform = generate_waveform(copy_of_upload)
     plot = plot_ecg(waveform)
     st.pyplot(plot)
 
