@@ -60,12 +60,15 @@ def take_recommendation(result):
     else: 
         return result
     
-
+def disable(b):
+    st.session_state["disabled"] = b
 ## streamlight code
 
 st.title('Automatic ECG diagnosis')
 st.subheader('A tool to view and analyze ECG data, backed by a deep neural network for classification', divider='blue')
 uploaded_file = st.file_uploader("Upload your DICOM file (.dcm)")
+
+    
 
 col1, col2,  = st.columns(2)
 with col1:
@@ -76,7 +79,12 @@ with col2:
 labels = [ "1dAVb", "RBBB", "LBBB", "SB", "AF", "ST"]
 
 #makes the prediction
-if st.button('Submit'):
+if uploaded_file is not None:
+    st.session_state.disabled = False
+
+submit_button = st.button('Submit', key='submit', disabled=st.session_state.get("disabled", True))
+
+if submit_button:
     with st.spinner('Analyzing data...'):
         data = predict.make_prediction(path_to_hdf5 = "./automatic_ecg_diagnosis_master/data/ecg_tracings.hdf5", 
                                    path_to_model = "./automatic_ecg_diagnosis_master/model/model.hdf5")
