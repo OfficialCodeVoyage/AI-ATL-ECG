@@ -12,7 +12,7 @@ new_hdf_file_path = 'new_ecg_tracings'
 
 
 def convert_dicom_to_hdf5(dicom_path, hdf5_path):
-    ds = pydicom.dcmread(dicom_path)
+    ds = pydicom.dcmread(dicom_path, force=True)
 
     if (0x5400, 0x0100) in ds:
         waveform_sequence = ds[0x5400, 0x0100]
